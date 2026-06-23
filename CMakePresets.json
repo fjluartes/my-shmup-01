@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "windows-default",
+      "binaryDir": "build",
+      "generator": "MinGW Makefiles"
+    },
+    {
+      "name": "unix-default",
+      "binaryDir": "build",
+      "generator": "Unix Makefiles"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows-default",
+      "configurePreset": "windows-default"
+    },
+    {
+      "name": "unix-default",
+      "configurePreset": "unix-default"
+    }
+  ]
+}
