@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2015-2018,2022 Parallel Realities. All rights reserved.
  */
+#include <SDL_image.h>
 
 #include "common.h"
 
@@ -39,10 +40,19 @@ void initSDL(void)
 		printf("Failed to create renderer: %s\n", SDL_GetError());
 		exit(1);
 	}
+
+	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+}
+
+void initGame(void)
+{
+
 }
 
 void cleanup(void)
 {
+	IMG_Quit();
+
 	SDL_DestroyRenderer(app.renderer);
 
 	SDL_DestroyWindow(app.window);
