@@ -97,8 +97,8 @@ static void doPlayer(void)
         if (app.keyboard[SDL_SCANCODE_LEFT]) player->dx = -PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_RIGHT]) player->dx = PLAYER_SPEED;
         // fireBullet();
-        player->x += player->dx;
-        player->y += player->dy;
+        // player->x += player->dx;
+        // player->y += player->dy;
     }
 }
 
@@ -144,10 +144,7 @@ static void doFighters(void)
             free(e);
             e = prev;
         }
-        else 
-        {
-            prev = e;
-        }
+        prev = e;
     }
 }
 

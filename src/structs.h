@@ -15,6 +15,7 @@ typedef struct
 	SDL_Window   *window;
 	Delegate delegate;
 	int keyboard[MAX_KEYBOARD_KEYS];
+	char inputText[MAX_LINE_LENGTH];
 } App;
 
 struct Entity
