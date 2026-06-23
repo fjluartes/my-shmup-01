@@ -6,6 +6,7 @@
 #include "common.h"
 
 #include "init.h"
+#include "stage.h"
 
 extern App app;
 
@@ -46,7 +47,7 @@ void initSDL(void)
 
 void initGame(void)
 {
-
+	initStage();
 }
 
 void cleanup(void)

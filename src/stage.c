@@ -16,11 +16,16 @@ static void initPlayer(void);
 static void resetStage(void);
 static void doPlayer(void);
 static void doFighters(void);
+static void doEnemies(void);
+static void spawnEnemies(void);
+static void clipPlayer(void);
 static void drawFighters(void);
 
 static Entity *player;
 static SDL_Texture *enemyTexture;
 static SDL_Texture *playerTexture;
+static int enemySpawnTimer;
+static int stageResetTimer;
 
 void initStage(void)
 {
@@ -38,6 +43,10 @@ void initStage(void)
     resetStage();
 
     initPlayer();
+
+    enemySpawnTimer = 0;
+
+    stageResetTimer = FPS * 3;
 }
 
 void resetStage(void)
@@ -73,6 +82,8 @@ static void logic(void)
     doPlayer();
     doEnemies();
     doFighters();
+    spawnEnemies();
+    clipPlayer();
 }
 
 static void doPlayer(void)
@@ -80,12 +91,14 @@ static void doPlayer(void)
     if (player != NULL)
     {
         player->dx = player->dy = 0;
-        if (player->reload > 0) player->reload--;
+        // if (player->reload > 0) player->reload--;
         if (app.keyboard[SDL_SCANCODE_UP]) player->dy = -PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_DOWN]) player->dy = PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_LEFT]) player->dx = -PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_RIGHT]) player->dx = PLAYER_SPEED;
         // fireBullet();
+        player->x += player->dx;
+        player->y += player->dy;
     }
 }
 
@@ -131,7 +144,49 @@ static void doFighters(void)
             free(e);
             e = prev;
         }
-        prev = e;
+        else 
+        {
+            prev = e;
+        }
+    }
+}
+
+static void spawnEnemies(void)
+{
+    Entity *enemy;
+    if (--enemySpawnTimer <= 0)
+    {
+        enemy = malloc(sizeof(Entity));
+        memset(enemy, 0, sizeof(Entity));
+        stage.fighterTail->next = enemy;
+        stage.fighterTail = enemy;
+
+        enemy->x = SCREEN_WIDTH;
+        enemy->y = rand() % SCREEN_HEIGHT;
+        enemy->texture = enemyTexture;
+        SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
+
+        enemy->dx = -(2 + (rand() % 4));
+        enemy->dy = -100 + (rand() % 200);
+        enemy->dy /= 100;
+
+        // enemy->side = SIDE_ALIEN;
+        enemy->health = 1;
+
+        // enemy->reload = FPS * (1 + (rand() % 3));
+
+        enemySpawnTimer = 30 + (rand() % FPS);
+    }
+}
+
+static void clipPlayer(void)
+{
+    if (player != NULL) 
+    {
+        if (player->x < 0) player->x = 0;
+        if (player->y < 0) player->y = 0;
+        if (player->x > SCREEN_WIDTH / 2) player->x = SCREEN_WIDTH / 2;
+        if (player->y > SCREEN_HEIGHT) player->y = SCREEN_HEIGHT;
     }
 }
 
