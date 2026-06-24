@@ -283,10 +283,7 @@ static void spawnEnemies(void)
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
 
-        // enemy->dx = -(2 + (rand() % 4));
-        // enemy->dy = -100 + (rand() % 200);
-        // enemy->dy /= 100;
-        enemy->dx = -(2 + (rand() % 4));
+        enemy->dx = 0;
         enemy->dy = 2 + (rand() % 3);
         enemy->dx /= 100;
 
