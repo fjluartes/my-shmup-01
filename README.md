@@ -14,6 +14,7 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Highscore Table (add name)
 - [ ] Title screen
 - [ ] Change gfx assets
+- [ ] Change to vertical shmup
 
 ## DONE
 - [x] Player bullet/firing
