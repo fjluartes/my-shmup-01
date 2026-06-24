@@ -20,6 +20,7 @@ static void doFighters(void);
 static void doEnemies(void);
 static void doBullets(void);
 static void fireBullet(void);
+static int bulletHitFighter(Entity *b);
 static void spawnEnemies(void);
 static void fireAlienBullet(Entity *e);
 static void clipPlayer(void);
@@ -92,6 +93,8 @@ static void initPlayer(void)
     player->y = 100;
     player->texture = playerTexture;
     SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
+
+    player->side = SIDE_PLAYER;
 }
 
 static void logic(void)
@@ -197,7 +200,8 @@ static void doBullets(void)
         b->x += b->dx;
         b->y += b->dy;
 
-        if (b->x > SCREEN_WIDTH || b->y > SCREEN_HEIGHT)
+        if (bulletHitFighter(b) || b->x < -b->w || b->y < -b->h ||
+            b->x > SCREEN_WIDTH || b->y > SCREEN_HEIGHT)
         {
             if (b == stage.bulletTail) stage.bulletTail = prev;
             prev->next = b->next;
@@ -234,6 +238,32 @@ static void fireAlienBullet(Entity *e)
     bullet->dx *= ALIEN_BULLET_SPEED;
     bullet->dy *= ALIEN_BULLET_SPEED;
     e->reload = (rand() % FPS * 2);
+}
+
+static int bulletHitFighter(Entity *b)
+{
+    Entity *e;
+
+    for (e = stage.fighterHead.next; e != NULL; e = e->next)
+    {
+        if (e->side != b->side &&
+            collision(b->x, b->y, b->w, b->h, e->x, e->y, e->w, e->h))
+        {
+            if (e == player && e->health > 0)
+            {
+                e->health -= 1;
+                b->health = 0;
+            }
+            else
+            {
+                e->health = 0;
+                b->health = 0;
+            }
+            // Play die sounds
+            return 1;
+        }
+    }
+    return 0;
 }
 
 static void spawnEnemies(void)
