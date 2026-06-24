@@ -44,7 +44,7 @@ void initStage(void)
     stage.fighterTail = &stage.fighterHead;
 
     enemyTexture = loadTexture("gfx/ufoRed.png");
-    playerTexture = loadTexture("gfx/playerShip2_red.png");
+    playerTexture = loadTexture("gfx/playerShip2_blue.png");
     bulletTexture = loadTexture("gfx/laserGreen10.png");
     enemyBulletTexture = loadTexture("gfx/laserRed02.png");
 
