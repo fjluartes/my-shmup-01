@@ -24,11 +24,14 @@ void initSDL(void)
 		exit(1);
 	}
 
-	app.window = SDL_CreateWindow("MY SHMUP 01", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
+	app.window = SDL_CreateWindow("MY SHMUP 01", 
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
+		SCREEN_WIDTH, SCREEN_HEIGHT, windowFlags);
 
 	if (!app.window)
 	{
-		printf("Failed to open %d x %d window: %s\n", SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
+		printf("Failed to open %d x %d window: %s\n", 
+			SCREEN_WIDTH, SCREEN_HEIGHT, SDL_GetError());
 		exit(1);
 	}
 

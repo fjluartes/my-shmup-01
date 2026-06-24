@@ -17,13 +17,18 @@ static void resetStage(void);
 static void doPlayer(void);
 static void doFighters(void);
 static void doEnemies(void);
+static void doBullets(void);
+static void fireBullet(void);
 static void spawnEnemies(void);
+static void fireAilenBullet(void);
 static void clipPlayer(void);
 static void drawFighters(void);
+static void drawBullets(void);
 
 static Entity *player;
 static SDL_Texture *enemyTexture;
 static SDL_Texture *playerTexture;
+static SDL_Texture *bulletTexture;
 static int enemySpawnTimer;
 static int stageResetTimer;
 
@@ -37,6 +42,7 @@ void initStage(void)
 
     enemyTexture = loadTexture("gfx/enemy.png");
     playerTexture = loadTexture("gfx/player.png");
+    bulletTexture = loadTexture("gfx/playerBullet.png");
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
 
@@ -60,7 +66,15 @@ void resetStage(void)
         free(e);
     }
 
+    while (stage.bulletHead.next)
+    {
+        e = stage.bulletHead.next;
+        stage.bulletHead.next = e->next;
+        free(e);
+    }
+
     stage.fighterTail = &stage.fighterHead;
+    stage.bulletTail = &stage.bulletHead;
 }
 
 static void initPlayer(void)
@@ -82,6 +96,7 @@ static void logic(void)
     doPlayer();
     doEnemies();
     doFighters();
+    doBullets();
     spawnEnemies();
     clipPlayer();
 }
@@ -91,15 +106,36 @@ static void doPlayer(void)
     if (player != NULL)
     {
         player->dx = player->dy = 0;
-        // if (player->reload > 0) player->reload--;
+        if (player->reload > 0) player->reload--;
         if (app.keyboard[SDL_SCANCODE_UP]) player->dy = -PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_DOWN]) player->dy = PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_LEFT]) player->dx = -PLAYER_SPEED;
         if (app.keyboard[SDL_SCANCODE_RIGHT]) player->dx = PLAYER_SPEED;
-        // fireBullet();
-        // player->x += player->dx;
-        // player->y += player->dy;
+        if (app.keyboard[SDL_SCANCODE_SPACE] && player->reload == 0)
+        {
+            fireBullet();
+        }
     }
+}
+
+static void fireBullet(void)
+{
+    Entity *bullet;
+    bullet = malloc(sizeof(Entity));
+    memset(bullet, 0, sizeof(Entity));
+    stage.bulletTail->next = bullet;
+    stage.bulletTail = bullet;
+
+    bullet->health = 1;
+    bullet->x = player->x;
+    bullet->y = player->y;
+    bullet->dx = PLAYER_BULLET_SPEED;
+    bullet->texture = bulletTexture;
+    bullet->side = SIDE_PLAYER;
+    SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
+
+    bullet->y += (player->h / 2) - (bullet->h / 2);
+    player->reload = 8;
 }
 
 static void doEnemies(void)
@@ -112,11 +148,10 @@ static void doEnemies(void)
         {
             e->y = MIN(MAX(e->y, 0), SCREEN_HEIGHT - e->h);
 
-            // if (player != NULL && --e->reload <= 0)
-            // {
-            //     fireAlienBullet(e);
-            //     playSound(SND_ALIEN_FIRE, CH_ALIEN_FIRE);
-            // }
+            if (player != NULL && --e->reload <= 0)
+            {
+                fireAlienBullet(e);
+            }
         }
     }
 }
@@ -146,6 +181,33 @@ static void doFighters(void)
         }
         prev = e;
     }
+}
+
+static void doBullets(void)
+{
+    Entity *b, *prev;
+
+    prev = &stage.bulletHead;
+
+    for (b = stage.bulletHead.next; b != NULL; b = b->next)
+    {
+        b->x += b->dx;
+        b->y += b->dy;
+
+        if (b->x > SCREEN_WIDTH || b->y > SCREEN_HEIGHT)
+        {
+            if (b == stage.bulletTail) stage.bulletTail = prev;
+            prev->next = b->next;
+            free(b);
+            b = prev;
+        }
+        prev = b;
+    }
+}
+
+static void fireAlienBullet(void)
+{
+
 }
 
 static void spawnEnemies(void)
@@ -190,6 +252,7 @@ static void clipPlayer(void)
 static void draw(void)
 {
     drawFighters();
+    drawBullets();
 }
 
 static void drawFighters(void)
@@ -197,6 +260,16 @@ static void drawFighters(void)
     Entity *e;
 
     for (e = stage.fighterHead.next; e != NULL; e = e->next)
+    {
+        blit(e->texture, e->x, e->y);
+    }
+}
+
+static void drawBullets(void)
+{
+    Entity *e;
+
+    for (e = stage.bulletHead.next; e != NULL; e = e->next)
     {
         blit(e->texture, e->x, e->y);
     }
