@@ -3,8 +3,7 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [ ] Change enemy assets
-- [ ] Start enemies from top of screen
+- [ ] Fix player fireBullet
 - [ ] Draw background
 - [ ] Draw starfield
 - [ ] Add explosions
@@ -16,6 +15,8 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Title screen
 
 ## DONE
+- [x] Change enemy assets
+- [x] Start enemies from top of screen
 - [x] Change to vertical orientation
 - [x] Change player assets
 - [x] Adds collision (bulletHitFighter)
