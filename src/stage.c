@@ -105,6 +105,10 @@ static void logic(void)
     doBullets();
     spawnEnemies();
     clipPlayer();
+    if (player == NULL && --stageResetTimer <= 0)
+    {
+        initStage(); // replace by initHighscores
+    }
 }
 
 static void doPlayer(void)
