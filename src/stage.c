@@ -89,7 +89,7 @@ static void initPlayer(void)
     stage.fighterTail = player;
 
     player->health = 3;
-    player->x = SCREEN_WIDTH / 2;
+    player->x = (SCREEN_WIDTH / 2) - (player->w / 2);
     player->y = 860;
     player->texture = playerTexture;
     SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
@@ -156,8 +156,6 @@ static void doEnemies(void)
     {
         if (e != player)
         {
-            e->y = MIN(MAX(e->y, 0), SCREEN_HEIGHT - e->h);
-
             if (player != NULL && --e->reload <= 0)
             {
                 fireAlienBullet(e);
@@ -280,14 +278,17 @@ static void spawnEnemies(void)
         stage.fighterTail->next = enemy;
         stage.fighterTail = enemy;
 
-        enemy->x = SCREEN_WIDTH;
-        enemy->y = rand() % SCREEN_HEIGHT;
+        enemy->x = rand() % SCREEN_WIDTH;
+        enemy->y = 0;
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
 
+        // enemy->dx = -(2 + (rand() % 4));
+        // enemy->dy = -100 + (rand() % 200);
+        // enemy->dy /= 100;
         enemy->dx = -(2 + (rand() % 4));
-        enemy->dy = -100 + (rand() % 200);
-        enemy->dy /= 100;
+        enemy->dy = 2 + (rand() % 3);
+        enemy->dx /= 100;
 
         enemy->side = SIDE_ALIEN;
         enemy->health = 1;
