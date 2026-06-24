@@ -304,8 +304,8 @@ static void clipPlayer(void)
     {
         if (player->x < 0) player->x = 0;
         if (player->y < 0) player->y = 0;
-        if (player->x > SCREEN_WIDTH) player->x = SCREEN_WIDTH - player->w;
-        if (player->y > SCREEN_HEIGHT) player->y = SCREEN_HEIGHT;
+        if (player->x > SCREEN_WIDTH - player->w) player->x = SCREEN_WIDTH - player->w;
+        if (player->y > SCREEN_HEIGHT - player->h) player->y = SCREEN_HEIGHT - player->h;
     }
 }
 
