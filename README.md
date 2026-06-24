@@ -3,7 +3,7 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [ ] Adds collision (bulletHitFighter)
+- [ ] Change to vertical orientation
 - [ ] Draw background
 - [ ] Draw starfield
 - [ ] Add explosions
@@ -14,9 +14,9 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Highscore Table (add name)
 - [ ] Title screen
 - [ ] Change gfx assets
-- [ ] Change to vertical shmup
 
 ## DONE
+- [x] Adds collision (bulletHitFighter)
 - [x] Enemy bullet/firing
 - [x] Player bullet/firing
 - [x] Enemy fighters

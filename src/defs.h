@@ -8,8 +8,10 @@
     strncpy(dest, src, n);    \
     dest[n - 1] = '\0'
 
-#define SCREEN_WIDTH  1280
-#define SCREEN_HEIGHT 720
+// #define SCREEN_WIDTH  1280
+// #define SCREEN_HEIGHT 720
+#define SCREEN_WIDTH 540
+#define SCREEN_HEIGHT 960
 
 #define MAX_LINE_LENGTH 1024
 

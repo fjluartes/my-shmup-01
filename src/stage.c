@@ -89,8 +89,8 @@ static void initPlayer(void)
     stage.fighterTail = player;
 
     player->health = 3;
-    player->x = 100;
-    player->y = 100;
+    player->x = SCREEN_WIDTH / 2;
+    player->y = 860;
     player->texture = playerTexture;
     SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
 
