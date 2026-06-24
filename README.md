@@ -3,7 +3,6 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [ ] Player bullet/firing
 - [ ] Enemy bullet/firing
 - [ ] Draw background
 - [ ] Draw starfield
@@ -17,6 +16,7 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Change gfx assets
 
 ## DONE
+- [x] Player bullet/firing
 - [x] Enemy fighters
 - [x] Player fighter (draw/move)
 - [x] Create template code/open SDL2 window
