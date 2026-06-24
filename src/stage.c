@@ -139,12 +139,12 @@ static void fireBullet(void)
     bullet->health = 1;
     bullet->x = player->x;
     bullet->y = player->y;
-    bullet->dx = PLAYER_BULLET_SPEED;
+    bullet->dy = -PLAYER_BULLET_SPEED;
     bullet->texture = bulletTexture;
     bullet->side = SIDE_PLAYER;
     SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
 
-    bullet->y += (player->h / 2) - (bullet->h / 2);
+    bullet->x += (player->w / 4) - (bullet->w / 4);
     player->reload = 8;
 }
 
@@ -249,7 +249,8 @@ static int bulletHitFighter(Entity *b)
     for (e = stage.fighterHead.next; e != NULL; e = e->next)
     {
         if (e->side != b->side &&
-            collision(b->x, b->y, b->w, b->h, e->x, e->y, e->w, e->h))
+            collision(b->x, b->y, b->w, b->h, 
+                      e->x, e->y, e->w / 2, e->h / 2))
         {
             if (e == player && e->health > 0)
             {
@@ -278,14 +279,13 @@ static void spawnEnemies(void)
         stage.fighterTail->next = enemy;
         stage.fighterTail = enemy;
 
-        enemy->x = rand() % SCREEN_WIDTH;
-        enemy->y = 0;
+        enemy->x = rand() % (SCREEN_WIDTH - enemy->w);
+        enemy->y = -enemy->h;
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
 
         enemy->dx = 0;
         enemy->dy = 2 + (rand() % 3);
-        enemy->dx /= 100;
 
         enemy->side = SIDE_ALIEN;
         enemy->health = 1;
@@ -302,10 +302,10 @@ static void clipPlayer(void)
     {
         if (player->x < 0) player->x = 0;
         if (player->y < 0) player->y = 0;
-        if (player->x > SCREEN_WIDTH - player->w) 
-            player->x = SCREEN_WIDTH - player->w;
-        if (player->y > SCREEN_HEIGHT - player->h) 
-            player->y = SCREEN_HEIGHT - player->h;
+        if (player->x > SCREEN_WIDTH - (player->w / 2)) 
+            player->x = SCREEN_WIDTH - (player->w / 2);
+        if (player->y > SCREEN_HEIGHT - (player->h / 2)) 
+            player->y = SCREEN_HEIGHT - (player->h / 2);
     }
 }
 
