@@ -31,13 +31,15 @@ SDL_Texture *loadTexture(char *filename)
 	return texture;
 }
 
-void blit(SDL_Texture *texture, int x, int y)
+void blit(SDL_Texture *texture, int x, int y, int w, int h)
 {
 	SDL_Rect dest;
 
 	dest.x = x;
 	dest.y = y;
-	SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
+	dest.w = w;
+	dest.h = h;
+	// SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
 	SDL_RenderCopy(app.renderer, texture, NULL, &dest);
 }

@@ -43,10 +43,10 @@ void initStage(void)
     memset(&stage, 0, sizeof(Stage));
     stage.fighterTail = &stage.fighterHead;
 
-    enemyTexture = loadTexture("gfx/enemy.png");
-    playerTexture = loadTexture("gfx/player.png");
-    bulletTexture = loadTexture("gfx/playerBullet.png");
-    enemyBulletTexture = loadTexture("gfx/alienBullet.png");
+    enemyTexture = loadTexture("gfx/ufoRed.png");
+    playerTexture = loadTexture("gfx/playerShip2_red.png");
+    bulletTexture = loadTexture("gfx/laserGreen10.png");
+    enemyBulletTexture = loadTexture("gfx/laserRed02.png");
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
 
@@ -323,7 +323,7 @@ static void drawFighters(void)
 
     for (e = stage.fighterHead.next; e != NULL; e = e->next)
     {
-        blit(e->texture, e->x, e->y);
+        blit(e->texture, e->x, e->y, e->w / 2, e->h / 2);
     }
 }
 
@@ -333,6 +333,6 @@ static void drawBullets(void)
 
     for (e = stage.bulletHead.next; e != NULL; e = e->next)
     {
-        blit(e->texture, e->x, e->y);
+        blit(e->texture, e->x, e->y, e->w / 2, e->h / 2);
     }
 }
