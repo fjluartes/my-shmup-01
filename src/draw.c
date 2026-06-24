@@ -37,7 +37,7 @@ void blit(SDL_Texture *texture, int x, int y, int w, int h)
 
 	dest.x = x;
 	dest.y = y;
-	dest.w = w;
+	dest.w = w; // adds w and h to scale texture
 	dest.h = h;
 	// SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 

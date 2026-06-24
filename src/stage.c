@@ -139,12 +139,12 @@ static void fireBullet(void)
     bullet->health = 1;
     bullet->x = player->x;
     bullet->y = player->y;
-    bullet->dy = -PLAYER_BULLET_SPEED;
+    bullet->dy = -PLAYER_BULLET_SPEED; // switch to bullet shooting up
     bullet->texture = bulletTexture;
     bullet->side = SIDE_PLAYER;
     SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
 
-    bullet->x += (player->w / 4) - (bullet->w / 4);
+    bullet->x += (player->w / 4) - (bullet->w / 4); // center bullet pos
     player->reload = 8;
 }
 
@@ -175,6 +175,7 @@ static void doFighters(void)
         e->x += e->dx;
         e->y += e->dy;
 
+        // clip enemy fighter & reverse dx on walls
         if (e != player)
         {
             if (e->x < 0)
@@ -297,11 +298,12 @@ static void spawnEnemies(void)
 
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
+        // enemy starting pos at top of screen
         enemy->x = rand() % (SCREEN_WIDTH - enemy->w);
         enemy->y = -enemy->h;
 
         enemy->dx = -2 + (rand() % 5);
-        enemy->dy = 2 + (rand() % 3);
+        enemy->dy = 2 + (rand() % 3); // move enemy fighters downward
 
         enemy->side = SIDE_ALIEN;
         enemy->health = 1;
