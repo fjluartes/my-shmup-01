@@ -175,10 +175,26 @@ static void doFighters(void)
         e->x += e->dx;
         e->y += e->dy;
 
-        if (e != player && e->x < -e->w)
+        if (e != player)
+        {
+            if (e->x < 0)
+            {
+                e->x = 0;
+                e->dx = -e->dx;
+            }
+
+            if (e->x > SCREEN_WIDTH - (e->w / 2))
+            {
+                e->x = SCREEN_WIDTH - (e->w / 2);
+                e->dx = -e->dx;
+            }
+        }
+
+        if (e != player && e->y > SCREEN_HEIGHT)
         {
             e->health = 0;
         }
+
         if (e->health == 0)
         {
             if (e == player) player = NULL;
@@ -279,12 +295,12 @@ static void spawnEnemies(void)
         stage.fighterTail->next = enemy;
         stage.fighterTail = enemy;
 
-        enemy->x = rand() % (SCREEN_WIDTH - enemy->w);
-        enemy->y = -enemy->h;
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
+        enemy->x = rand() % (SCREEN_WIDTH - enemy->w);
+        enemy->y = -enemy->h;
 
-        enemy->dx = 0;
+        enemy->dx = -2 + (rand() % 5);
         enemy->dy = 2 + (rand() % 3);
 
         enemy->side = SIDE_ALIEN;

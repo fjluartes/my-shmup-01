@@ -3,7 +3,6 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [ ] Change enemy movement
 - [ ] Draw background
 - [ ] Draw starfield
 - [ ] Add explosions
@@ -15,6 +14,7 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Title screen
 
 ## DONE
+- [x] Change enemy movement
 - [x] Fix player fireBullet
 - [x] Change enemy assets
 - [x] Start enemies from top of screen
