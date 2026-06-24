@@ -6,6 +6,7 @@
 
 #include "draw.h"
 #include "stage.h"
+#include "util.h"
 
 extern App app;
 extern Stage stage;
@@ -20,7 +21,7 @@ static void doEnemies(void);
 static void doBullets(void);
 static void fireBullet(void);
 static void spawnEnemies(void);
-static void fireAilenBullet(void);
+static void fireAlienBullet(Entity *e);
 static void clipPlayer(void);
 static void drawFighters(void);
 static void drawBullets(void);
@@ -29,6 +30,7 @@ static Entity *player;
 static SDL_Texture *enemyTexture;
 static SDL_Texture *playerTexture;
 static SDL_Texture *bulletTexture;
+static SDL_Texture *enemyBulletTexture;
 static int enemySpawnTimer;
 static int stageResetTimer;
 
@@ -43,6 +45,7 @@ void initStage(void)
     enemyTexture = loadTexture("gfx/enemy.png");
     playerTexture = loadTexture("gfx/player.png");
     bulletTexture = loadTexture("gfx/playerBullet.png");
+    enemyBulletTexture = loadTexture("gfx/alienBullet.png");
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
 
@@ -205,9 +208,32 @@ static void doBullets(void)
     }
 }
 
-static void fireAlienBullet(void)
+static void fireAlienBullet(Entity *e)
 {
+    Entity *bullet;
+    bullet = malloc(sizeof(Entity));
+    memset(bullet, 0, sizeof(Entity));
+    stage.bulletTail->next = bullet;
+    stage.bulletTail = bullet;
 
+    bullet->health = 1;
+    bullet->x = e->x;
+    bullet->y = e->y;
+    bullet->texture = enemyBulletTexture;
+    bullet->side = SIDE_ALIEN;
+    SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
+
+    bullet->x += (e->w / 2) - (bullet->w / 2);
+    bullet->y += (e->h / 2) - (bullet->h / 2);
+
+    calcSlope(player->x + (player->w / 2),
+              player->y + (player->h / 2),
+              e->x, e->y,
+              &bullet->dx, &bullet->dy);
+
+    bullet->dx *= ALIEN_BULLET_SPEED;
+    bullet->dy *= ALIEN_BULLET_SPEED;
+    e->reload = (rand() % FPS * 2);
 }
 
 static void spawnEnemies(void)
@@ -229,10 +255,10 @@ static void spawnEnemies(void)
         enemy->dy = -100 + (rand() % 200);
         enemy->dy /= 100;
 
-        // enemy->side = SIDE_ALIEN;
+        enemy->side = SIDE_ALIEN;
         enemy->health = 1;
 
-        // enemy->reload = FPS * (1 + (rand() % 3));
+        enemy->reload = FPS * (1 + (rand() % 3));
 
         enemySpawnTimer = 30 + (rand() % FPS);
     }
