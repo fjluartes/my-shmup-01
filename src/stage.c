@@ -257,7 +257,7 @@ static void fireAlienBullet(Entity *e)
 
     calcSlope(player->x + (player->w / 2),
               player->y + (player->h / 2),
-              e->x, e->y,
+              bullet->x, bullet->y,
               &bullet->dx, &bullet->dy);
 
     bullet->dx *= ALIEN_BULLET_SPEED;
@@ -272,7 +272,7 @@ static int bulletHitFighter(Entity *b)
     for (e = stage.fighterHead.next; e != NULL; e = e->next)
     {
         if (e->side != b->side &&
-            collision(b->x, b->y, b->w, b->h, 
+            collision(b->x, b->y, b->w / 2, b->h / 2, 
                       e->x, e->y, e->w / 2, e->h / 2))
         {
             if (e == player && e->health > 0)
@@ -305,10 +305,10 @@ static void spawnEnemies(void)
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
         // enemy starting pos at top of screen
-        enemy->x = rand() % (SCREEN_WIDTH - enemy->w);
+        enemy->x = rand() % (SCREEN_WIDTH - enemy->w / 2);
         enemy->y = -enemy->h;
 
-        enemy->dx = -2 + (rand() % 5);
+        enemy->dx = 0;
         enemy->dy = 2 + (rand() % 3); // move enemy fighters downward
 
         enemy->side = SIDE_ALIEN;
