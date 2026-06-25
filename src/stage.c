@@ -92,8 +92,8 @@ static void initPlayer(void)
     player->health = 3;
     player->texture = playerTexture;
     SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
-    player->x = (SCREEN_WIDTH / 2) - (player->w / 2);
-    player->y = 860;
+    player->x = (SCREEN_WIDTH / 2) - (player->w / 4);
+    player->y = (SCREEN_HEIGHT * 3) / 4;
 
     player->side = SIDE_PLAYER;
 }
