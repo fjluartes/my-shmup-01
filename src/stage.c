@@ -27,6 +27,9 @@ static void fireAlienBullet(Entity *e);
 static void clipPlayer(void);
 static void drawFighters(void);
 static void drawBullets(void);
+static void doExplosions(void);
+static void drawExplosions(void);
+static void addExplosions(int x, int y, int num);
 
 static Entity *player;
 static SDL_Texture *enemyTexture;
