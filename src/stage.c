@@ -1,6 +1,6 @@
 /*
  * stage.c: File with all the main game logic
- * Revision: 2026-06-24 fjluartes
+ * Revision: 2026-06-25 fjluartes
  */
 #include "common.h"
 
