@@ -38,3 +38,10 @@ typedef struct
 	Entity fighterHead, *fighterTail;
 	Entity bulletHead, *bulletTail;
 } Stage;
+
+typedef struct
+{
+	int x;
+	int y;
+	int speed;
+} Star;

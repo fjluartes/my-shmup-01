@@ -5,6 +5,7 @@
 
 #include "common.h"
 
+#include "background.h"
 #include "init.h"
 #include "stage.h"
 
@@ -50,7 +51,11 @@ void initSDL(void)
 
 void initGame(void)
 {
-	initStage();
+	initBackground();
+
+	initStarfield();
+
+	initStage(); // add to highscores.c
 }
 
 void cleanup(void)

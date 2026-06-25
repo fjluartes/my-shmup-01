@@ -4,6 +4,7 @@
  */
 #include "common.h"
 
+#include "background.h"
 #include "draw.h"
 #include "stage.h"
 #include "util.h"
@@ -99,6 +100,8 @@ static void initPlayer(void)
 
 static void logic(void)
 {
+    doBackground();
+    doStarfield();
     doPlayer();
     doEnemies();
     doFighters();
@@ -335,6 +338,8 @@ static void clipPlayer(void)
 
 static void draw(void)
 {
+    drawBackground();
+    drawStarfield();
     drawFighters();
     drawBullets();
 }
