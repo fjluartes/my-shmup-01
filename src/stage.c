@@ -36,6 +36,7 @@ static SDL_Texture *enemyTexture;
 static SDL_Texture *playerTexture;
 static SDL_Texture *bulletTexture;
 static SDL_Texture *enemyBulletTexture;
+static SDL_Texture *explosionTexture;
 static int enemySpawnTimer;
 static int stageResetTimer;
 
@@ -46,11 +47,14 @@ void initStage(void)
 
     memset(&stage, 0, sizeof(Stage));
     stage.fighterTail = &stage.fighterHead;
+    stage.bulletTail = &stage.bulletHead;
+    stage.explosionTail = &stage.explosionHead;
 
     enemyTexture = loadTexture("gfx/ufoRed.png");
     playerTexture = loadTexture("gfx/playerShip2_blue.png");
     bulletTexture = loadTexture("gfx/laserGreen10.png");
     enemyBulletTexture = loadTexture("gfx/laserRed02.png");
+    explosionTexture = loadTexture("gfx/explosion.png");
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
 
@@ -66,6 +70,7 @@ void initStage(void)
 void resetStage(void)
 {
     Entity *e;
+    Explosion *ex;
 
     while (stage.fighterHead.next)
     {
@@ -81,8 +86,16 @@ void resetStage(void)
         free(e);
     }
 
+    while (stage.explosionHead.next)
+    {
+        ex = stage.explosionHead.next;
+        stage.explosionHead.next = ex->next;
+        free(ex);
+    }
+
     stage.fighterTail = &stage.fighterHead;
     stage.bulletTail = &stage.bulletHead;
+    stage.explosionTail = &stage.explosionHead;
 }
 
 static void initPlayer(void)
@@ -339,6 +352,36 @@ static void clipPlayer(void)
     }
 }
 
+static void doExplosions(void)
+{
+    Entity *e, *prev;
+
+    prev = &stage.explosionHead;
+
+    for (e = stage.explosionHead.next; e != NULL; e = e->next)
+    {
+        e->x += e->dx;
+        e->y += e->dy;
+
+        if (--e->a <= 0)
+        {
+            if (e == stage.explosionTail) stage.explosionTail = prev;
+            prev->next = e->next;
+            free(e);
+            e = prev;
+        }
+        else 
+        {
+            prev = e;
+        }
+    }
+}
+
+static void addExplosions(void)
+{
+    Explosion *e;
+}
+
 static void draw(void)
 {
     drawBackground();
@@ -365,4 +408,9 @@ static void drawBullets(void)
     {
         blit(e->texture, e->x, e->y, e->w / 2, e->h / 2);
     }
+}
+
+static void drawExplosions(void)
+{
+
 }

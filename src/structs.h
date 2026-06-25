@@ -2,6 +2,7 @@
  * Copyright (C) 2015-2018,2022 Parallel Realities. All rights reserved.
  */
 typedef struct Entity Entity;
+typedef struct Explosion Explosion;
 
 typedef struct 
 {
@@ -33,10 +34,22 @@ struct Entity
 	Entity *next;
 };
 
+struct Explosion
+{
+	float x;
+	float y;
+	float dx;
+	float dy;
+	int r, g, b, a;
+	Explosion *next;
+};
+
 typedef struct
 {
 	Entity fighterHead, *fighterTail;
 	Entity bulletHead, *bulletTail;
+	Explosion explosionHead, *explosionTail;
+	int score;
 } Stage;
 
 typedef struct
