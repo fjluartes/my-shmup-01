@@ -89,10 +89,10 @@ static void initPlayer(void)
     stage.fighterTail = player;
 
     player->health = 3;
-    player->x = (SCREEN_WIDTH / 2) - (player->w / 2);
-    player->y = 860;
     player->texture = playerTexture;
     SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
+    player->x = (SCREEN_WIDTH / 2) - (player->w / 2);
+    player->y = 860;
 
     player->side = SIDE_PLAYER;
 }
@@ -204,7 +204,10 @@ static void doFighters(void)
             free(e);
             e = prev;
         }
-        prev = e;
+        else
+        {
+            prev = e;
+        }
     }
 }
 
@@ -227,7 +230,10 @@ static void doBullets(void)
             free(b);
             b = prev;
         }
-        prev = b;
+        else 
+        {
+            prev = b;
+        }
     }
 }
 
@@ -256,7 +262,7 @@ static void fireAlienBullet(Entity *e)
 
     bullet->dx *= ALIEN_BULLET_SPEED;
     bullet->dy *= ALIEN_BULLET_SPEED;
-    e->reload = (rand() % FPS * 2);
+    e->reload = FPS + (rand() % (FPS * 2));
 }
 
 static int bulletHitFighter(Entity *b)
