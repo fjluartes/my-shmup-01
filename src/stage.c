@@ -122,6 +122,7 @@ static void logic(void)
     doEnemies();
     doFighters();
     doBullets();
+    doExplosions();
     spawnEnemies();
     clipPlayer();
     if (player == NULL && --stageResetTimer <= 0)
@@ -304,6 +305,9 @@ static int bulletHitFighter(Entity *b)
                 e->health = 0;
                 b->health = 0;
             }
+            addExplosions(e->x + e->w / 4, e->y + e->h / 4, 32);
+            // Add debris
+
             // Play die sounds
             return 1;
         }
@@ -354,7 +358,7 @@ static void clipPlayer(void)
 
 static void doExplosions(void)
 {
-    Entity *e, *prev;
+    Explosion *e, *prev;
 
     prev = &stage.explosionHead;
 
@@ -377,9 +381,49 @@ static void doExplosions(void)
     }
 }
 
-static void addExplosions(void)
+static void addExplosions(int x, int y, int num)
 {
     Explosion *e;
+    int i;
+
+    for (i = 0; i < num; i++)
+    {
+        e = malloc(sizeof(Explosion));
+        memset(e, 0, sizeof(Explosion));
+        stage.explosionTail->next = e;
+        stage.explosionTail = e;
+
+        e->x = x + (rand() % 32) - (rand() % 32);
+        e->y = y + (rand() % 32) - (rand() % 32);
+        // shrink range, scattered
+        e->dx = (rand() % 10) - (rand() % 10);
+        e->dy = (rand() % 10) - (rand() % 10);
+        e->dx /= 10;
+        e->dy /= 10;
+
+        switch (rand() % 4)
+        {
+            case 0:
+                e->r = 255;
+                break;
+            case 1:
+                e->r = 255;
+                e->g = 128;
+                break;
+            case 2:
+                e->r = 255;
+                e->g = 255;
+                break;
+            default:
+                e->r = 255;
+                e->g = 255;
+                e->b = 255;
+                break;
+        }
+
+        e->a = rand() % (FPS * 3);
+
+    }
 }
 
 static void draw(void)
@@ -387,6 +431,7 @@ static void draw(void)
     drawBackground();
     drawStarfield();
     drawFighters();
+    drawExplosions();
     drawBullets();
 }
 
@@ -412,5 +457,20 @@ static void drawBullets(void)
 
 static void drawExplosions(void)
 {
+    Explosion *e;
+    SDL_Rect dest;
+    SDL_QueryTexture(explosionTexture, NULL, NULL, &dest.w, &dest.h);
 
+    SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_ADD);
+    SDL_SetTextureBlendMode(explosionTexture, SDL_BLENDMODE_ADD);
+
+    for (e = stage.explosionHead.next; e != NULL; e = e->next)
+    {
+        SDL_SetTextureColorMod(explosionTexture, e->r, e->g, e->b);
+        SDL_SetTextureAlphaMod(explosionTexture, e->a);
+
+        blit(explosionTexture, e->x, e->y, dest.w / 2, dest.h / 2);
+    }
+
+    SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_NONE);
 }

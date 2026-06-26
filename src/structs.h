@@ -40,6 +40,8 @@ struct Explosion
 	float y;
 	float dx;
 	float dy;
+	int w;
+	int h;
 	int r, g, b, a;
 	Explosion *next;
 };
