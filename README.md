@@ -3,7 +3,7 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [ ] Add explosions/debris
+- [ ] Add debris
 - [ ] Sounds/music
 - [ ] Fonts and scoring
 - [ ] Score pods
@@ -12,6 +12,8 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Title screen
 
 ## DONE
+- [x] Explosions minor changes
+- [x] Add explosions
 - [x] Draw background
 - [x] Draw starfield
 - [x] Change enemy movement
