@@ -12,6 +12,7 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - [ ] Title screen
 
 ## DONE
+- [x] Bug fixes
 - [x] Explosions minor changes
 - [x] Add explosions
 - [x] Draw background
