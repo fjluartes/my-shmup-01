@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2015-2018,2022 Parallel Realities. All rights reserved.
  * My Shmup 01
- * Revision: 2026-06-25 fjluartes
+ * Revision: 2026-06-27 fjluartes
  */
 
 #include "common.h"

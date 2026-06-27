@@ -1,6 +1,6 @@
 /*
  * stage.c: File with all the main game logic
- * Revision: 2026-06-25 fjluartes
+ * Revision: 2026-06-27 fjluartes
  */
 #include "common.h"
 
@@ -20,6 +20,8 @@ static void doPlayer(void);
 static void doFighters(void);
 static void doEnemies(void);
 static void doBullets(void);
+static void doExplosions(void);
+static void doDebris(void);
 static void fireBullet(void);
 static int bulletHitFighter(Entity *b);
 static void spawnEnemies(void);
@@ -27,9 +29,10 @@ static void fireAlienBullet(Entity *e);
 static void clipPlayer(void);
 static void drawFighters(void);
 static void drawBullets(void);
-static void doExplosions(void);
 static void drawExplosions(void);
+static void drawDebris(void);
 static void addExplosions(int x, int y, int num);
+static void addDebris(Entity *e);
 
 static Entity *player;
 static SDL_Texture *enemyTexture;
@@ -49,6 +52,7 @@ void initStage(void)
     stage.fighterTail = &stage.fighterHead;
     stage.bulletTail = &stage.bulletHead;
     stage.explosionTail = &stage.explosionHead;
+    stage.debrisTail = &stage.debrisHead;
 
     enemyTexture = loadTexture("gfx/ufoRed.png");
     playerTexture = loadTexture("gfx/playerShip2_blue.png");
@@ -71,6 +75,7 @@ void resetStage(void)
 {
     Entity *e;
     Explosion *ex;
+    Debris *d;
 
     while (stage.fighterHead.next)
     {
@@ -93,9 +98,17 @@ void resetStage(void)
         free(ex);
     }
 
+    while (stage.debrisHead.next)
+    {
+        d = stage.debrisHead.next;
+        stage.debrisHead.next = d->next;
+        free(d);
+    }
+
     stage.fighterTail = &stage.fighterHead;
     stage.bulletTail = &stage.bulletHead;
     stage.explosionTail = &stage.explosionHead;
+    stage.debrisTail = &stage.debrisHead;
 }
 
 static void initPlayer(void)
@@ -125,6 +138,7 @@ static void logic(void)
     doFighters();
     doBullets();
     doExplosions();
+    doDebris();
     spawnEnemies();
     clipPlayer();
     if (player == NULL && --stageResetTimer <= 0)
@@ -313,7 +327,7 @@ static int bulletHitFighter(Entity *b)
                 b->health = 0;
             }
             addExplosions(e->x + e->w / 2, e->y + e->h / 2, 32);
-            // Add debris
+            addDebris(e);
 
             // Play die sounds
             return 1;
@@ -390,6 +404,11 @@ static void doExplosions(void)
     }
 }
 
+static void doDebris(void)
+{
+
+}
+
 static void addExplosions(int x, int y, int num)
 {
     Explosion *e;
@@ -433,11 +452,17 @@ static void addExplosions(int x, int y, int num)
     }
 }
 
+static void addDebris(Entity *e)
+{
+
+}
+
 static void draw(void)
 {
     drawBackground();
     drawStarfield();
     drawFighters();
+    drawDebris();
     drawExplosions();
     drawBullets();
 }
@@ -460,6 +485,11 @@ static void drawBullets(void)
     {
         blit(e->texture, e->x, e->y, e->w, e->h);
     }
+}
+
+static void drawDebris(void)
+{
+
 }
 
 static void drawExplosions(void)
