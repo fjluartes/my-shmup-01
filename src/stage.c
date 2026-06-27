@@ -208,9 +208,9 @@ static void doFighters(void)
                 e->dx = -e->dx;
             }
 
-            if (e->x > SCREEN_WIDTH - (e->w / 2))
+            if (e->x > SCREEN_WIDTH - e->w)
             {
-                e->x = SCREEN_WIDTH - (e->w / 2);
+                e->x = SCREEN_WIDTH - e->w;
                 e->dx = -e->dx;
             }
         }
