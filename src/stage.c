@@ -108,7 +108,9 @@ static void initPlayer(void)
     player->health = 3;
     player->texture = playerTexture;
     SDL_QueryTexture(player->texture, NULL, NULL, &player->w, &player->h);
-    player->x = (SCREEN_WIDTH / 2) - (player->w / 4);
+    player->w /= 2;
+    player->h /= 2;
+    player->x = (SCREEN_WIDTH - player->w) / 2;
     player->y = (SCREEN_HEIGHT * 3) / 4;
 
     player->side = SIDE_PLAYER;
@@ -157,14 +159,16 @@ static void fireBullet(void)
     stage.bulletTail = bullet;
 
     bullet->health = 1;
+    bullet->side = SIDE_PLAYER;
+    bullet->texture = bulletTexture;
+    SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
+    bullet->w /= 2;
+    bullet->h /= 2;
     bullet->x = player->x;
     bullet->y = player->y;
     bullet->dy = -PLAYER_BULLET_SPEED; // switch to bullet shooting up
-    bullet->texture = bulletTexture;
-    bullet->side = SIDE_PLAYER;
-    SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
 
-    bullet->x += (player->w / 4) - (bullet->w / 4); // center bullet pos
+    bullet->x += (player->w / 2) - (bullet->w / 2); // center bullet pos
     player->reload = 8;
 }
 
@@ -266,14 +270,17 @@ static void fireAlienBullet(Entity *e)
     stage.bulletTail = bullet;
 
     bullet->health = 1;
+    bullet->side = SIDE_ALIEN;
+    bullet->texture = enemyBulletTexture;
+    SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
+    bullet->w /= 2;
+    bullet->h /= 2;
+
     bullet->x = e->x;
     bullet->y = e->y;
-    bullet->texture = enemyBulletTexture;
-    bullet->side = SIDE_ALIEN;
-    SDL_QueryTexture(bullet->texture, NULL, NULL, &bullet->w, &bullet->h);
 
-    bullet->x += (e->w / 2) - (bullet->w / 2);
-    bullet->y += (e->h / 2) - (bullet->h / 2);
+    bullet->x += (e->w -bullet->w) / 2;
+    bullet->y += (e->h - bullet->h) / 2;
 
     calcSlope(player->x + (player->w / 2),
               player->y + (player->h / 2),
@@ -292,8 +299,8 @@ static int bulletHitFighter(Entity *b)
     for (e = stage.fighterHead.next; e != NULL; e = e->next)
     {
         if (e->side != b->side &&
-            collision(b->x, b->y, b->w / 2, b->h / 2, 
-                      e->x, e->y, e->w / 2, e->h / 2))
+            collision(b->x, b->y, b->w, b->h, 
+                      e->x, e->y, e->w, e->h))
         {
             if (e == player && e->health > 0)
             {
@@ -305,7 +312,7 @@ static int bulletHitFighter(Entity *b)
                 e->health = 0;
                 b->health = 0;
             }
-            addExplosions(e->x + e->w / 4, e->y + e->h / 4, 32);
+            addExplosions(e->x + e->w / 2, e->y + e->h / 2, 32);
             // Add debris
 
             // Play die sounds
@@ -327,8 +334,10 @@ static void spawnEnemies(void)
 
         enemy->texture = enemyTexture;
         SDL_QueryTexture(enemy->texture, NULL, NULL, &enemy->w, &enemy->h);
+        enemy->w /= 2;
+        enemy->h /= 2;
         // enemy starting pos at top of screen
-        enemy->x = rand() % (SCREEN_WIDTH - enemy->w / 2);
+        enemy->x = rand() % (SCREEN_WIDTH - enemy->w);
         enemy->y = -enemy->h;
 
         enemy->dx = 0;
@@ -349,10 +358,10 @@ static void clipPlayer(void)
     {
         if (player->x < 0) player->x = 0;
         if (player->y < 0) player->y = 0;
-        if (player->x > SCREEN_WIDTH - (player->w / 2)) 
-            player->x = SCREEN_WIDTH - (player->w / 2);
-        if (player->y > SCREEN_HEIGHT - (player->h / 2)) 
-            player->y = SCREEN_HEIGHT - (player->h / 2);
+        if (player->x > SCREEN_WIDTH - player->w) 
+            player->x = SCREEN_WIDTH - player->w;
+        if (player->y > SCREEN_HEIGHT - player->h) 
+            player->y = SCREEN_HEIGHT - player->h;
     }
 }
 
@@ -439,7 +448,7 @@ static void drawFighters(void)
 
     for (e = stage.fighterHead.next; e != NULL; e = e->next)
     {
-        blit(e->texture, e->x, e->y, e->w / 2, e->h / 2);
+        blit(e->texture, e->x, e->y, e->w, e->h);
     }
 }
 
@@ -449,7 +458,7 @@ static void drawBullets(void)
 
     for (e = stage.bulletHead.next; e != NULL; e = e->next)
     {
-        blit(e->texture, e->x, e->y, e->w / 2, e->h / 2);
+        blit(e->texture, e->x, e->y, e->w, e->h);
     }
 }
 
@@ -458,6 +467,8 @@ static void drawExplosions(void)
     Explosion *e;
     SDL_Rect dest;
     SDL_QueryTexture(explosionTexture, NULL, NULL, &dest.w, &dest.h);
+    dest.w /= 2;
+    dest.h /= 2;
 
     SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_ADD);
     SDL_SetTextureBlendMode(explosionTexture, SDL_BLENDMODE_ADD);
@@ -467,7 +478,7 @@ static void drawExplosions(void)
         SDL_SetTextureColorMod(explosionTexture, e->r, e->g, e->b);
         SDL_SetTextureAlphaMod(explosionTexture, e->a);
 
-        blit(explosionTexture, e->x, e->y, dest.w / 2, dest.h / 2);
+        blit(explosionTexture, e->x, e->y, dest.w, dest.h);
     }
 
     SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_NONE);
