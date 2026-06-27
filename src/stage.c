@@ -396,10 +396,11 @@ static void addExplosions(int x, int y, int num)
         e->x = x + (rand() % 32) - (rand() % 32);
         e->y = y + (rand() % 32) - (rand() % 32);
         // shrink range, scattered
-        e->dx = (rand() % 10) - (rand() % 10);
-        e->dy = (rand() % 10) - (rand() % 10);
+        e->dx = (rand() % 10) - (rand() % 9);
+        e->dy = (rand() % 10) - (rand() % 9);
         e->dx /= 10;
         e->dy /= 10;
+        
 
         switch (rand() % 4)
         {
@@ -420,9 +421,7 @@ static void addExplosions(int x, int y, int num)
                 e->b = 255;
                 break;
         }
-
-        e->a = rand() % (FPS * 3);
-
+        e->a = 1 + rand() % (FPS * 3);
     }
 }
 
