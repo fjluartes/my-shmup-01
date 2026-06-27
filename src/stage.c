@@ -406,7 +406,27 @@ static void doExplosions(void)
 
 static void doDebris(void)
 {
+    Debris *d, *prev;
+    prev = &stage.debrisHead;
 
+    for (d = stage.debrisHead.next; d != NULL; d = d->next)
+    {
+        d->x += d->dx;
+        d->y += d->dy;
+
+        d->dy += 0.5;
+
+        if (--d->life <= 0)
+        {
+            if (d == stage.debrisTail) stage.debrisTail = prev;
+            prev->next = d->next;
+            d = prev;
+        }
+        else
+        {
+            prev = d;
+        }
+    }
 }
 
 static void addExplosions(int x, int y, int num)
@@ -454,7 +474,34 @@ static void addExplosions(int x, int y, int num)
 
 static void addDebris(Entity *e)
 {
+    Debris *d;
+    int x, y, w, h;
 
+    w = e->w / 2;
+    h = e->h / 2;
+
+    for (y = 0; y <= h; y += h)
+    {
+        for (x = 0; x <= w; x += w)
+        {
+            d = malloc(sizeof(Debris));
+            memset(d, 0, sizeof(Debris));
+            stage.debrisTail->next = d;
+            stage.debrisTail = d;
+
+            d->x = e->x + e->w / 2;
+            d->y = e->y + e->h / 2;
+            d->dx = (rand() % 5) - (rand() % 5);
+            d->dy = 5 + (rand() % 12);
+            d->life = FPS * 2;
+            d->texture = e->texture;
+
+            d->rect.x = x;
+            d->rect.y = y;
+            d->rect.w = w;
+            d->rect.h = h;
+        }
+    }
 }
 
 static void draw(void)
@@ -489,7 +536,12 @@ static void drawBullets(void)
 
 static void drawDebris(void)
 {
+    Debris *d;
 
+    for (d = stage.debrisHead.next; d != NULL; d = d->next)
+    {
+        blitRect(d->texture, &d->rect, d->x, d->y);
+    }
 }
 
 static void drawExplosions(void)
