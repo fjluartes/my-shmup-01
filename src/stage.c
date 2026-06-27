@@ -395,7 +395,6 @@ static void addExplosions(int x, int y, int num)
 
         e->x = x + (rand() % 32) - (rand() % 32);
         e->y = y + (rand() % 32) - (rand() % 32);
-        // shrink range, scattered
         e->dx = (rand() % 10) - (rand() % 9);
         e->dy = (rand() % 10) - (rand() % 9);
         e->dx /= 10;
