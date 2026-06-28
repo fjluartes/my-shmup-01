@@ -161,6 +161,7 @@ static void doPlayer(void)
         if (app.keyboard[SDL_SCANCODE_SPACE] && player->reload == 0)
         {
             fireBullet();
+            playSound(SND_PLAYER_FIRE, CH_PLAYER);
         }
     }
 }
@@ -198,6 +199,7 @@ static void doEnemies(void)
             if (player != NULL && --e->reload <= 0)
             {
                 fireAlienBullet(e);
+                playSound(SND_ALIEN_FIRE, CH_ALIEN_FIRE);
             }
         }
     }
@@ -330,7 +332,14 @@ static int bulletHitFighter(Entity *b)
             addExplosions(e->x + e->w / 2, e->y + e->h / 2, 32);
             addDebris(e);
 
-            // Play die sounds
+            if (e == player)
+            {
+                playSound(SND_PLAYER_DIE, CH_PLAYER);
+            }
+            else
+            {
+                playSound(SND_ALIEN_DIE, CH_ANY);
+            }
             return 1;
         }
     }
