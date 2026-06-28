@@ -6,6 +6,7 @@
 
 #include "background.h"
 #include "draw.h"
+#include "sound.h"
 #include "stage.h"
 #include "util.h"
 

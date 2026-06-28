@@ -2,11 +2,13 @@
  * Copyright (C) 2015-2018,2022 Parallel Realities. All rights reserved.
  */
 #include <SDL_image.h>
+#include <SDL_mixer.h>
 
 #include "common.h"
 
 #include "background.h"
 #include "init.h"
+#include "sound.h"
 #include "stage.h"
 
 extern App app;
@@ -24,6 +26,14 @@ void initSDL(void)
 		printf("Couldn't initialize SDL: %s\n", SDL_GetError());
 		exit(1);
 	}
+
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+	{
+		printf("Couldn't initializ SDL Mixer\n");
+		exit(1);
+	}
+
+	Mix_AllocateChannels(MAX_SND_CHANNELS);
 
 	app.window = SDL_CreateWindow("MY SHMUP 01", 
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 
@@ -47,6 +57,8 @@ void initSDL(void)
 	}
 
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+
+	SDL_ShowCursor(0);
 }
 
 void initGame(void)
@@ -55,11 +67,19 @@ void initGame(void)
 
 	initStarfield();
 
+	initSounds();
+
 	initStage(); // add to highscores.c
+
+	loadMusic("music/Mercury.ogg");
+
+	playMusic(1);
 }
 
 void cleanup(void)
 {
+	Mix_Quit();
+
 	IMG_Quit();
 
 	SDL_DestroyRenderer(app.renderer);
