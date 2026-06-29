@@ -187,10 +187,11 @@ static void drawNameInput(void)
     drawText(SCREEN_WIDTH / 2, 250, 255, 255, 255, 
         TEXT_CENTER, newHighscore->name);
 
+    int textWidth = strlen(newHighscore->name) * GLYPH_WIDTH;
+
     if (cursorBlink < FPS / 2)
     {
-        r.x = ((SCREEN_WIDTH / 4) + 
-            (strlen(newHighscore->name) * GLYPH_WIDTH) / 2) + 5;
+        r.x = (SCREEN_WIDTH - textWidth) / 2 + textWidth + 5;
         r.y = 250;
         r.w = GLYPH_WIDTH;
         r.h = GLYPH_HEIGHT;
