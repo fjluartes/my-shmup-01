@@ -60,8 +60,8 @@ void initStage(void)
 
     enemyTexture = loadTexture("gfx/ufoRed.png");
     playerTexture = loadTexture("gfx/playerShip2_blue.png");
-    bulletTexture = loadTexture("gfx/laserGreen10.png");
-    enemyBulletTexture = loadTexture("gfx/laserRed02.png");
+    enemyBulletTexture = loadTexture("gfx/laserGreen10.png");
+    bulletTexture = loadTexture("gfx/laserRed02.png");
     explosionTexture = loadTexture("gfx/explosion.png");
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
