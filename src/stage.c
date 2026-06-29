@@ -6,6 +6,7 @@
 
 #include "background.h"
 #include "draw.h"
+#include "highscores.h"
 #include "sound.h"
 #include "stage.h"
 #include "text.h"
@@ -159,11 +160,13 @@ static void logic(void)
     doBullets();
     doExplosions();
     doDebris();
+    doPointsPods();
     spawnEnemies();
     clipPlayer();
     if (player == NULL && --stageResetTimer <= 0)
     {
-        initStage(); // replace by initHighscores
+        addHighscore(stage.score);
+        initHighscores();
     }
 }
 
@@ -460,6 +463,61 @@ static void doDebris(void)
     }
 }
 
+static void doPointsPods(void)
+{
+    Entity *e, *prev;
+
+    prev = &stage.pointsHead;
+
+    for (e = stage.poitnsHead.next; e != NULL; e = e->next)
+    {
+        // clip points
+        if (e->x < 0)
+        {
+            e->x = 0;
+            e->dx = -e->dx;
+        }
+
+        if (e->x + e->w > SCREEN_WIDTH)
+        {
+            e->x = SCREEN_WIDTH - e->w;
+            e->dx = -e->dx;
+        }
+
+        if (e->y < 0)
+        {
+            e->y = 0;
+            e->dy = -e->dy;
+        }
+
+        e->x += e->dx;
+        e->y += e->dy;
+
+        if (player != NULL && 
+            collision(e->x, e->y, e->w, e->h, player->x, player->y, player->w, player->h))
+        {
+            e->health = 0;
+            stage.score++;
+            playSound(SND_POINTS, CH_POINTS);
+        }
+
+        if (--e->health <= 0)
+        {
+            if (e == stage.pointsTail)
+            {
+                stage.pointsTail = prev;
+            }
+            prev->next = e->next;
+            free(e);
+            e = prev;
+        }
+        else
+        {
+            prev = e;
+        }
+    }
+}
+
 static void addExplosions(int x, int y, int num)
 {
     Explosion *e;
@@ -535,6 +593,27 @@ static void addDebris(Entity *e)
     }
 }
 
+static void addPointsPods(int x, int y)
+{
+    Entity *e;
+
+    e = malloc(sizeof(Entity));
+    memset(e, 0, sizeof(Entity));
+    stage.pointsTail->next = e;
+    stage.pointsTail = e;
+
+    e->texture = pointsTexture;
+    SDL_QueryTexture(e->texture, NULL, NULL, &e->w, &e->h);
+    e->x = x;
+    e->y = y;
+    e->dx = -(rand() % 5);
+    e->dy = (rand() % 5) - (rand() % 5);
+    e->health = FPS * 10;
+
+    e->x -= e->w / 2;
+    e->y -= e->h / 2;
+}
+
 static void draw(void)
 {
     drawBackground();
@@ -543,6 +622,7 @@ static void draw(void)
     drawDebris();
     drawExplosions();
     drawBullets();
+    drawPointsPods();
     drawHud();
 }
 
@@ -573,6 +653,19 @@ static void drawDebris(void)
     for (d = stage.debrisHead.next; d != NULL; d = d->next)
     {
         blitRect(d->texture, &d->rect, d->x, d->y);
+    }
+}
+
+static void drawPointsPods(void)
+{
+    Entity *e;
+
+    for (e = stage.pointsHead.next; e != NULL; e = e->next)
+    {
+        if (e->health > (FPS * 2) || e->health % 12 < 6)
+        {
+            blit(e->texture, e->x, e->y);    
+        }
     }
 }
 
