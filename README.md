@@ -4,10 +4,10 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 
 ## TODO
 - [x] Highscore Table (new window)
-- [ ] Highscore Table (add name)
 - [ ] Title screen
 
 ## DONE
+- [x] Highscore Table (add name)
 - [x] Score pods
 - [x] Fonts and scoring
 - [x] Sounds/music
