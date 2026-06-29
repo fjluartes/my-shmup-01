@@ -115,6 +115,11 @@ static void logic(void)
             initStage();
         }
     }
+
+    if (++cursorBlink >= FPS)
+    {
+        cursorBlink = 0;
+    }
 }
 
 static void doNameInput(void)
@@ -215,7 +220,7 @@ static void drawHighscores(void)
         {
             b = 0;
         }
-        drawText(SCREEN_WIDTH / 2, y, r, g, b, TEXT_CENTER, "#%d. %-14s ...... %03d", 
+        drawText(SCREEN_WIDTH / 2, y, r, g, b, TEXT_CENTER, "#%d. %-10s ... %03d", 
                 (i + 1), highscores.highscore[i].name, highscores.highscore[i].score);
 
         y += 50;
@@ -256,5 +261,5 @@ static int highscoreComparator(const void *a, const void *b)
     Highscore *h1 = ((Highscore *)a);
     Highscore *h2 = ((Highscore *)b);
 
-    return h2->score = h1->score;
+    return h2->score - h1->score;
 }
