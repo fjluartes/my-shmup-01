@@ -51,7 +51,6 @@ static SDL_Texture *explosionTexture;
 static SDL_Texture *pointsTexture;
 static int enemySpawnTimer;
 static int stageResetTimer;
-static int highscore;
 
 void initStage(void)
 {
@@ -695,12 +694,13 @@ static void drawHud(void)
 {
     drawText(10, 40, 255, 255, 255, TEXT_LEFT, "SCORE: %03d", stage.score);
 
-    if (stage.score > 0 && stage.score == highscore)
+    if (stage.score < highscores.highscore[0].score)
     {
-        drawText(10, 10, 0, 255, 0, TEXT_LEFT, "HIGHSCORE: %03d", highscore);
+        drawText(10, 10, 0, 255, 0, TEXT_LEFT, "HIGHSCORE: %03d", 
+            highscores.highscore[0].score);
     }
     else
     {
-        drawText(10, 10, 255, 255, 255, TEXT_LEFT, "HIGHSCORE: %03d", highscore);
+        drawText(10, 10, 255, 255, 255, TEXT_LEFT, "HIGHSCORE: %03d", stage.score);
     }
 }

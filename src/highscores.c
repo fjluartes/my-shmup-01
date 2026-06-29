@@ -220,7 +220,7 @@ static void drawHighscores(void)
         {
             b = 0;
         }
-        drawText(SCREEN_WIDTH / 2, y, r, g, b, TEXT_CENTER, "#%d. %-10s ... %03d", 
+        drawText(SCREEN_WIDTH / 2, y, r, g, b, TEXT_CENTER, "#%d. %-15s ... %03d", 
                 (i + 1), highscores.highscore[i].name, highscores.highscore[i].score);
 
         y += 50;
