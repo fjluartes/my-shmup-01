@@ -8,6 +8,7 @@
 #include "draw.h"
 #include "sound.h"
 #include "stage.h"
+#include "text.h"
 #include "util.h"
 
 extern App app;
@@ -34,6 +35,7 @@ static void drawExplosions(void);
 static void drawDebris(void);
 static void addExplosions(int x, int y, int num);
 static void addDebris(Entity *e);
+static void drawHud(void);
 
 static Entity *player;
 static SDL_Texture *enemyTexture;
@@ -43,6 +45,7 @@ static SDL_Texture *enemyBulletTexture;
 static SDL_Texture *explosionTexture;
 static int enemySpawnTimer;
 static int stageResetTimer;
+static int highscore;
 
 void initStage(void)
 {
@@ -64,6 +67,8 @@ void initStage(void)
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
 
     resetStage();
+
+    stage.score = 0;
 
     initPlayer();
 
@@ -339,6 +344,8 @@ static int bulletHitFighter(Entity *b)
             else
             {
                 playSound(SND_ALIEN_DIE, CH_ANY);
+                stage.score++;
+                highscore = MAX(stage.score, highscore);
             }
             return 1;
         }
@@ -522,6 +529,7 @@ static void draw(void)
     drawDebris();
     drawExplosions();
     drawBullets();
+    drawHud();
 }
 
 static void drawFighters(void)
@@ -574,4 +582,18 @@ static void drawExplosions(void)
     }
 
     SDL_SetRenderDrawBlendMode(app.renderer, SDL_BLENDMODE_NONE);
+}
+
+static void drawHud(void)
+{
+    drawText(10, 40, 255, 255, 255, TEXT_LEFT, "SCORE: %03d", stage.score);
+
+    if (stage.score > 0 && stage.score == highscore)
+    {
+        drawText(10, 10, 0, 255, 0, TEXT_LEFT, "HIGHSCORE: %03d", highscore);
+    }
+    else
+    {
+        drawText(10, 10, 255, 255, 255, TEXT_LEFT, "HIGHSCORE: %03d", highscore);
+    }
 }

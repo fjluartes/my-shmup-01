@@ -9,6 +9,7 @@
 #include "background.h"
 #include "init.h"
 #include "sound.h"
+#include "text.h"
 #include "stage.h"
 
 extern App app;
@@ -68,6 +69,8 @@ void initGame(void)
 	initStarfield();
 
 	initSounds();
+
+	initFonts();
 
 	initStage(); // add to highscores.c
 

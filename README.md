@@ -3,13 +3,13 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [ ] Fonts and scoring
 - [ ] Score pods
 - [ ] Highscore Table (new window)
 - [ ] Highscore Table (add name)
 - [ ] Title screen
 
 ## DONE
+- [x] Fonts and scoring
 - [x] Sounds/music
 - [x] Add debris
 - [x] Bug fixes
