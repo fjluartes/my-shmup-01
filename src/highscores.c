@@ -176,15 +176,15 @@ static void drawNameInput(void)
     SDL_Rect r;
 
     drawText(SCREEN_WIDTH / 2, 70, 255, 255, 255, 
-        TEXT_CENTER, "CONGRATULATIONS, YOU'VE GAINED A HIGHSCORE!");
+        TEXT_CENTER, "CONGRATS! HIGHSCORE!");
     drawText(SCREEN_WIDTH / 2, 120, 255, 255, 255, 
-        TEXT_CENTER, "ENTER YOUR NAME BELOW:");
+        TEXT_CENTER, "ENTER NAME BELOW:");
     drawText(SCREEN_WIDTH / 2, 250, 255, 255, 255, 
         TEXT_CENTER, newHighscore->name);
 
     if (cursorBlink < FPS / 2)
     {
-        r.x = ((SCREEN_WIDTH / 2) + 
+        r.x = ((SCREEN_WIDTH / 4) + 
             (strlen(newHighscore->name) * GLYPH_WIDTH) / 2) + 5;
         r.y = 250;
         r.w = GLYPH_WIDTH;
