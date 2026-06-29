@@ -7,10 +7,10 @@
 #include "common.h"
 
 #include "background.h"
+#include "highscores.h"
 #include "init.h"
 #include "sound.h"
 #include "text.h"
-#include "stage.h"
 
 extern App app;
 
@@ -68,15 +68,15 @@ void initGame(void)
 
 	initStarfield();
 
-	initSounds();
+	// initSounds();
 
 	initFonts();
 
-	initStage(); // add to highscores.c
+	initHighscoreTable();
 
-	loadMusic("music/Mercury.ogg");
+	// loadMusic("music/Mercury.ogg");
 
-	playMusic(1);
+	// playMusic(1);
 }
 
 void cleanup(void)

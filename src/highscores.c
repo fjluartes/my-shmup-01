@@ -120,12 +120,12 @@ static void doNameInput(void)
 
     n = strlen(newHighscore->name);
 
-    for (i = 0; i < (int) strlen(app.inputText); i++)
+    for (i = 0; i < (int)strlen(app.inputText); i++)
     {
         c = toupper(app.inputText[i]);
         if (n < MAX_SCORE_NAME_LENGTH - 1 && c >= ' ' && c <= 'Z')
         {
-            newNighscore->name[n++] = c;
+            newHighscore->name[n++] = c;
         }
     }
 
@@ -241,7 +241,7 @@ void addHighscore(int score)
     }
 }
 
-static int highscoreComparator(const void *a, cosnt void *b)
+static int highscoreComparator(const void *a, const void *b)
 {
     Highscore *h1 = ((Highscore *)a);
     Highscore *h2 = ((Highscore *)b);
