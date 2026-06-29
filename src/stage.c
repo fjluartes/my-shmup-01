@@ -36,6 +36,9 @@ static void drawDebris(void);
 static void addExplosions(int x, int y, int num);
 static void addDebris(Entity *e);
 static void drawHud(void);
+static void doPointsPods(void);
+static void drawPointsPods(void);
+static void addPointsPod(int x, int y);
 
 static Entity *player;
 static SDL_Texture *enemyTexture;
@@ -43,6 +46,7 @@ static SDL_Texture *playerTexture;
 static SDL_Texture *bulletTexture;
 static SDL_Texture *enemyBulletTexture;
 static SDL_Texture *explosionTexture;
+static SDL_Texture *pointsTexture;
 static int enemySpawnTimer;
 static int stageResetTimer;
 static int highscore;
@@ -57,12 +61,14 @@ void initStage(void)
     stage.bulletTail = &stage.bulletHead;
     stage.explosionTail = &stage.explosionHead;
     stage.debrisTail = &stage.debrisHead;
+    stage.pointsTail = &stage.pointsHead;
 
     enemyTexture = loadTexture("gfx/ufoRed.png");
     playerTexture = loadTexture("gfx/playerShip2_blue.png");
     enemyBulletTexture = loadTexture("gfx/laserGreen10.png");
     bulletTexture = loadTexture("gfx/laserRed02.png");
     explosionTexture = loadTexture("gfx/explosion.png");
+    pointsTexture = loadTexture("gfx/points.png");
 
     memset(app.keyboard, 0, sizeof(int) * MAX_KEYBOARD_KEYS);
 
@@ -111,10 +117,18 @@ void resetStage(void)
         free(d);
     }
 
+    while (stage.pointsHead.next)
+    {
+        e = stage.pointsHead.next;
+        stage.pointsHead.next = e->next;
+        free(e);
+    }
+
     stage.fighterTail = &stage.fighterHead;
     stage.bulletTail = &stage.bulletHead;
     stage.explosionTail = &stage.explosionHead;
     stage.debrisTail = &stage.debrisHead;
+    stage.pointsTail = &stage.pointsHead;
 }
 
 static void initPlayer(void)
