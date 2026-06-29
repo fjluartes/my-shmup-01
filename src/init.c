@@ -11,6 +11,7 @@
 #include "init.h"
 #include "sound.h"
 #include "text.h"
+#include "stage.h"
 
 extern App app;
 
@@ -68,15 +69,17 @@ void initGame(void)
 
 	initStarfield();
 
-	initSounds();
+	// initSounds();
 
 	initFonts();
 
 	initHighscoreTable();
 
-	loadMusic("music/Mercury.ogg");
+	initStage(); // remove for title
 
-	playMusic(1);
+	// loadMusic("music/Mercury.ogg");
+
+	// playMusic(1);
 }
 
 void cleanup(void)

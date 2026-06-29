@@ -109,7 +109,11 @@ static void logic(void)
     else
     {
         // initTitle();
-        initStage();
+
+        if (app.keyboard[SDL_SCANCODE_SPACE])
+        {
+            initStage();
+        }
     }
 }
 
