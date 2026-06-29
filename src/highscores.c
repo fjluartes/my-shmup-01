@@ -129,9 +129,15 @@ static void doNameInput(void)
         }
     }
 
-    if (app,keyboard[SDL_SCANCODE_RETURN])
+    if (n > 0 && app.keyboard[SDL_SCANCODE_BACKSPACE])
     {
-        if (strlen(newHighscore->name == 0))
+        newHighscore->name[--n] = '\0';
+        app.keyboard[SDL_SCANCODE_BACKSPACE] = 0;
+    }
+
+    if (app.keyboard[SDL_SCANCODE_RETURN])
+    {
+        if (strlen(newHighscore->name) == 0)
         {
             STRNCPY(newHighscore->name, "ANON", MAX_SCORE_NAME_LENGTH);
         }

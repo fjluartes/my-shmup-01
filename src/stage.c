@@ -13,6 +13,7 @@
 #include "util.h"
 
 extern App app;
+extern Highscores highscores;
 extern Stage stage;
 
 static void logic(void);
@@ -360,9 +361,8 @@ static int bulletHitFighter(Entity *b)
             }
             else
             {
+                addPointsPod(e->x + e->w / 2, e->y + e->h / 2);
                 playSound(SND_ALIEN_DIE, CH_ANY);
-                stage.score++;
-                highscore = MAX(stage.score, highscore);
             }
             return 1;
         }
@@ -469,7 +469,7 @@ static void doPointsPods(void)
 
     prev = &stage.pointsHead;
 
-    for (e = stage.poitnsHead.next; e != NULL; e = e->next)
+    for (e = stage.pointsHead.next; e != NULL; e = e->next)
     {
         // clip points
         if (e->x < 0)
@@ -593,7 +593,7 @@ static void addDebris(Entity *e)
     }
 }
 
-static void addPointsPods(int x, int y)
+static void addPointsPod(int x, int y)
 {
     Entity *e;
 
@@ -664,7 +664,7 @@ static void drawPointsPods(void)
     {
         if (e->health > (FPS * 2) || e->health % 12 < 6)
         {
-            blit(e->texture, e->x, e->y);    
+            blit(e->texture, e->x, e->y, e->w, e->h);    
         }
     }
 }

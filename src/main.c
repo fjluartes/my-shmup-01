@@ -12,6 +12,7 @@
 #include "main.h"
 
 App app;
+Highscores highscores;
 Stage stage;
 
 static void capFrameRate(long *then, float *remainder);
