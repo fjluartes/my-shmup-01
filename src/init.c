@@ -69,17 +69,15 @@ void initGame(void)
 
 	initStarfield();
 
-	// initSounds();
+	initSounds();
 
 	initFonts();
 
 	initHighscoreTable();
 
-	initStage(); // remove for title
+	loadMusic("music/Mercury.ogg");
 
-	// loadMusic("music/Mercury.ogg");
-
-	// playMusic(1);
+	playMusic(1);
 }
 
 void cleanup(void)

@@ -3,9 +3,11 @@
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
 ## TODO
-- [x] Title screen
+- [ ] Polish game
+- [ ] Add other bullet/s
 
 ## DONE
+- [x] Title screen
 - [x] Highscore Table (new window)
 - [x] Highscore Table (add name)
 - [x] Score pods
