@@ -2,9 +2,14 @@
 
 Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.parallelrealities.co.uk/tutorials/).
 
+## SETUP
+- Add CMakeLists.txt from previous projects (my-sdl-shmup)
+- Add CMakePresets.json
+- Create build.sh, build.bat
+
 ## TODO
-- [ ] Polish game
-- [ ] Add other bullet/s
+- [ ] Add enemy pattern
+- [ ] Add basic bullet pattern
 
 ## DONE
 - [x] Title screen
