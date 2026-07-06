@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.23)
-project(
+CMake_Minimum_Required (VERSION 3.23)
+Project(
     my-shmup-01
     VERSION 1.0
     DESCRIPTION "Shmup-01 SDL2"
@@ -18,25 +18,7 @@ file(GLOB SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-if(MINGW)
-    target_link_options(${PROJECT_NAME} PRIVATE -mwindows)
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        -Wall
-        -Wextra
-        -Wempty-body
-        -Werror
-        -Warray-bounds
-        -g
-        -Wstrict-prototypes
-        -Werror=uninitialized
-    )
-elseif(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        /W4
-        /WX
-        /Zi
-    )
-endif()
+add_compile_options(-Wall -Wempty-body -Werror -Wstrict-prototypes -Werror=maybe-uninitialized -Warray-bounds -g)
 
 # ── Platform linking ──────────────────────────────────────────────────────────
 if(MINGW)
