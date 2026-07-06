@@ -18,10 +18,48 @@ file(GLOB SOURCES
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-add_compile_options(-Wall -Wempty-body -Werror -Wstrict-prototypes -Werror=maybe-uninitialized -Warray-bounds -g)
-
 # ── Platform linking ──────────────────────────────────────────────────────────
-if(MINGW)
+if(MSVC)
+    set(SDL2_VC_ROOT       "C:/sdl/SDL2-2.32.2")
+    set(SDL2_MIXER_VC_ROOT "C:/sdl/SDL2_mixer-2.8.0")
+    set(SDL2_IMAGE_VC_ROOT "C:/sdl/SDL2_image-2.8.12")
+    set(SDL2_TTF_VC_ROOT   "C:/sdl/SDL2_ttf-2.24.0")
+
+    target_include_directories(${PROJECT_NAME} PRIVATE
+        "${SDL2_VC_ROOT}/include"
+        "${SDL2_MIXER_VC_ROOT}/include"
+        "${SDL2_IMAGE_VC_ROOT}/include"
+        "${SDL2_TTF_VC_ROOT}/include"
+    )
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        "${SDL2_VC_ROOT}/lib/x64/SDL2main.lib"
+        "${SDL2_VC_ROOT}/lib/x64/SDL2.lib"
+        "${SDL2_IMAGE_VC_ROOT}/lib/x64/SDL2_image.lib"
+        "${SDL2_MIXER_VC_ROOT}/lib/x64/SDL2_mixer.lib"
+        "${SDL2_TTF_VC_ROOT}/lib/x64/SDL2_ttf.lib"
+    )
+
+    target_link_options(${PROJECT_NAME} PRIVATE /SUBSYSTEM:WINDOWS)
+
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        /W4
+        /WX
+        /wd4100  # unreferenced formal parameter
+        /wd4244  # float/int conversion
+        /wd4305  # double to float truncation
+    )
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SDL2_VC_ROOT}/lib/x64/SDL2.dll"
+            "${SDL2_IMAGE_VC_ROOT}/lib/x64/SDL2_image.dll"
+            "${SDL2_MIXER_VC_ROOT}/lib/x64/SDL2_mixer.dll"
+            "${SDL2_TTF_VC_ROOT}/lib/x64/SDL2_ttf.dll"
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+
+elseif(MINGW)
     set(SDL2_ROOT       "C:/sdl/SDL2-2.32.2/x86_64-w64-mingw32")
     set(SDL2_MIXER_ROOT "C:/sdl/SDL2_mixer-2.8.0/x86_64-w64-mingw32")
     set(SDL2_IMAGE_ROOT "C:/sdl/SDL2_image-2.8.12/x86_64-w64-mingw32")
@@ -42,7 +80,14 @@ if(MINGW)
         "${SDL2_MIXER_ROOT}/lib/libSDL2_mixer.dll.a"
         "${SDL2_TTF_ROOT}/lib/libSDL2_ttf.dll.a"
     )
+
     target_link_options(${PROJECT_NAME} PRIVATE -mwindows)
+
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        -Wall -Wempty-body -Werror -Warray-bounds -g
+        $<$<COMPILE_LANGUAGE:C>:-Wstrict-prototypes -Werror=maybe-uninitialized>
+    )
+
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${SDL2_ROOT}/bin/SDL2.dll"
@@ -51,6 +96,7 @@ if(MINGW)
             "${SDL2_TTF_ROOT}/bin/SDL2_ttf.dll"
             $<TARGET_FILE_DIR:${PROJECT_NAME}>
     )
+
 elseif(APPLE)
     execute_process(
         COMMAND brew --prefix
@@ -62,24 +108,26 @@ elseif(APPLE)
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(SDL2 REQUIRED sdl2)
 
-    # SDL2_image/mixer/ttf have broken transitive deps on macOS (zlib, libpng, etc.)
-    # so we skip pkg-config for them and link dylibs directly
     target_include_directories(${PROJECT_NAME} PRIVATE
         "${BREW_PREFIX}/include/SDL2"
     )
+
     target_link_libraries(${PROJECT_NAME} PRIVATE
         ${SDL2_LIBRARIES}
         "${BREW_PREFIX}/lib/libSDL2_image.dylib"
         "${BREW_PREFIX}/lib/libSDL2_mixer.dylib"
         "${BREW_PREFIX}/lib/libSDL2_ttf.dylib"
     )
+
     target_link_directories(${PROJECT_NAME} PRIVATE
         "${BREW_PREFIX}/lib"
     )
+
     target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall -Wempty-body -Werror -Warray-bounds -g
         $<$<COMPILE_LANGUAGE:C>:-Wstrict-prototypes -Werror=uninitialized>
     )
+
 else()
     # Linux
     find_package(SDL2 REQUIRED)
@@ -88,6 +136,7 @@ else()
     find_package(SDL2_ttf REQUIRED)
 
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
+
     target_link_libraries(${PROJECT_NAME} PRIVATE
         SDL2::SDL2
         SDL2_image::SDL2_image
