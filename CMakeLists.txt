@@ -20,10 +20,10 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 
 # ── Platform linking ──────────────────────────────────────────────────────────
 if(MSVC)
-    set(SDL2_VC_ROOT       "C:/sdl/SDL2-2.32.2")
-    set(SDL2_MIXER_VC_ROOT "C:/sdl/SDL2_mixer-2.8.0")
-    set(SDL2_IMAGE_VC_ROOT "C:/sdl/SDL2_image-2.8.12")
-    set(SDL2_TTF_VC_ROOT   "C:/sdl/SDL2_ttf-2.24.0")
+    set(SDL2_VC_ROOT       "C:/sdl/SDL2-2.32.8-VC")
+    set(SDL2_MIXER_VC_ROOT "C:/sdl/SDL2_mixer-2.8.2-VC")
+    set(SDL2_IMAGE_VC_ROOT "C:/sdl/SDL2_image-2.8.12-VC")
+    set(SDL2_TTF_VC_ROOT   "C:/sdl/SDL2_ttf-2.24.0-VC")
 
     target_include_directories(${PROJECT_NAME} PRIVATE
         "${SDL2_VC_ROOT}/include"
@@ -45,9 +45,11 @@ if(MSVC)
     target_compile_options(${PROJECT_NAME} PRIVATE
         /W4
         /WX
-        /wd4100  # unreferenced formal parameter
-        /wd4244  # float/int conversion
-        /wd4305  # double to float truncation
+        /wd4100   # unreferenced formal parameter
+        /wd4244   # float/int conversion
+        /wd4305   # double to float
+        /wd4996   # unsafe CRT functions
+        /wd4267   # size_t to int
     )
 
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
