@@ -8,10 +8,14 @@ Copy of SDL2 Shmup game from [Parallel Realities SDL2 tutorial](https://www.para
 - Create build.sh, build.bat
 
 ## TODO
-- [ ] Add enemy pattern
+- [ ] Edit enemy pattern
 - [ ] Add basic bullet pattern
+- [ ] Migrate to SDL3
+- [ ] Refactor src files
 
 ## DONE
+- [x] Add enemy pattern
+- [x] Fixed debris leak
 - [x] Title screen
 - [x] Highscore Table (new window)
 - [x] Highscore Table (add name)
