@@ -453,6 +453,7 @@ static void doDebris(void)
         {
             if (d == stage.debrisTail) stage.debrisTail = prev;
             prev->next = d->next;
+            free(d);
             d = prev;
         }
         else
